@@ -12,6 +12,11 @@ The agent's core mission is to act as an expert PHM analyst, capable of performi
 - **Feature Extraction**: Engineering meaningful features from processed signals to highlight indicators of system health.
 - **Anomaly Detection**: Identifying unusual patterns or outliers in data that may signify incipient faults.
 - **Fault Diagnosis**: Pinpointing the root cause of detected anomalies and classifying specific fault types.
+- **Reporting**: Generating comprehensive reports summarizing findings, including visualizations and actionable insights.
+- **Knowledge-Driven Research**: Utilizing a knowledge base to inform analysis and improve accuracy.
+- **Iterative Improvement**: Continuously refining its approach based on feedback and new data.
+- **Tool Utilization**: Effectively using a set of specialized Python functions for PHM tasks.
+
 
 ## 2. System Prompt for the Smol Agent
 
