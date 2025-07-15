@@ -50,7 +50,7 @@ Analyze the vibration sensor data located in `data/bearing_vibration.csv`. The f
 
 ## 4. Advanced Capabilities: Knowledge-Driven Research
 
-A key feature of the Codex agent is its ability to perform **knowledge-driven research** before beginning technical analysis. By calling the `research_fault_signatures` function, the agent enriches its understanding of the problem domain.
+A key feature of the Codex agent is its ability to perform **knowledge-driven research** before beginning technical analysis. By calling the  function, the agent enriches its understanding of the problem domain.
 
 For instance, when tasked with analyzing a 'bearing', the agent will first retrieve critical information about characteristic fault frequencies, such as:
 - **BPFO** (Ball Pass Frequency of Outer Race)
@@ -60,6 +60,6 @@ For instance, when tasked with analyzing a 'bearing', the agent will first retri
 
 This allows the agent to move from a purely data-driven approach to a more **hypothesis-driven methodology**. It knows what to look for in the frequency spectrum, making its subsequent analysis more targeted, efficient, and accurate.
 
-## 5. Required Tools & Functions (`phm_tools.py`)
+## 5. Required Tools & Functions
 
 To be effective, the Codex agent requires a dedicated Python script containing specialized functions.
