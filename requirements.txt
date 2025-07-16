@@ -1,0 +1,19 @@
+openai
+python-dotenv
+numpy
+scipy
+PyWavelets
+google-generativeai
+scikit-learn
+PyYAML
+dotenv
+pandas
+h5py
+PyEMD
+vmdpy
+lancedb
+umap-learn
+networkx
+matplotlib
+PyPDF2
+pip install "smolagents[all]"
