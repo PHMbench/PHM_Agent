@@ -29,13 +29,14 @@ def create_manager_agent(model: Model) -> CodeAgent:
     # PHM analysis agent using registered tools
     FeatureTools = get_tool("FeatureExtractorTools")
     SignalTools = get_tool("SignalProcessingTools")
-    PHMAgentCls = get_agent("PHMAgent")
+    PHMAgentCls = ToolCallingAgent # get_agent("PHMAgent")
     phm_agent = PHMAgentCls(
         tools=[FeatureTools(), SignalTools()],
         model=model,
         name="phm_agent",
         description="Agent for PHM signal analysis.",
         return_full_result=True,
+        add_base_tools=True,
     )
 
     # Retrieval agent utilizing semantic search
@@ -46,6 +47,7 @@ def create_manager_agent(model: Model) -> CodeAgent:
         name="retrieval_agent",
         description="Agent that performs document retrieval via vector search.",
         return_full_result=True,
+        add_base_tools=True,
     )
 
     # Manager agent orchestrating both sub agents
@@ -54,6 +56,7 @@ def create_manager_agent(model: Model) -> CodeAgent:
         model=model,
         managed_agents=[search_agent, phm_agent, retrieval_agent],
         return_full_result=True,
+        add_base_tools=True,
     )
     return manager_agent
 

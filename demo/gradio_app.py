@@ -11,10 +11,12 @@ sys.path.append(str(ROOT))
 from agents_config import create_manager_agent
 from model_config import configure_model
 from smolagents import GradioUI
+from dotenv import load_dotenv
 
+load_dotenv(override=True)
 
 def main() -> None:
-    model = configure_model()
+    model = configure_model('litellm')
     agent = create_manager_agent(model)
     GradioUI(agent, file_upload_folder="./data").launch()
 

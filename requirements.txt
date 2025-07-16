@@ -16,4 +16,8 @@ umap-learn
 networkx
 matplotlib
 PyPDF2
-pip install "smolagents[all]"
+smolagents[all]
+google-adk litellm
+langchain
+langchain_chroma
+langchain_huggingface

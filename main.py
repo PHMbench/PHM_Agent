@@ -9,7 +9,9 @@ from agents_config import create_manager_agent
 from model_config import configure_model
 
 from smolagents import GradioUI
+from dotenv import load_dotenv
 
+load_dotenv(override=True)
 
 def main(inference: str = "inference_client", inspect: bool = False, ui: bool = False) -> None:
     """Run a demo workflow using smolagents.
@@ -47,7 +49,7 @@ def main(inference: str = "inference_client", inspect: bool = False, ui: bool = 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run the PHM agent demo")
     parser.add_argument(
-        "--inference",
+        "--litellm",
         default="inference_client",
         choices=["inference_client", "transformers", "ollama", "litellm", "openai"],
         help="Select inference backend",

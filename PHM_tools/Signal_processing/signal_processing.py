@@ -282,53 +282,86 @@ class SignalProcessingTools:
 
 @register_tool("normalize")
 @tool
-def normalize(signal: list | np.ndarray) -> list:
-    """Normalize a signal along its length dimension."""
-    return SignalProcessingTools().normalize(np.asarray(signal)).tolist()
+def normalize(signal: list | np.ndarray) -> np.ndarray:
+    """Normalize a signal along its length dimension.
+    
+    Args:
+        signal: The input signal to normalize.
+    """
+    return SignalProcessingTools().normalize(np.asarray(signal))
 
 
 @register_tool("detrend")
 @tool
-def detrend(signal: list | np.ndarray) -> list:
-    """Remove linear trend from a signal."""
-    return SignalProcessingTools().detrend(np.asarray(signal)).tolist()
+def detrend(signal: list | np.ndarray) -> np.ndarray:
+    """Remove linear trend from a signal.
+    
+    Args:
+        signal: The input signal to detrend.
+    """
+    return SignalProcessingTools().detrend(np.asarray(signal))
 
 
 @register_tool("bandpass")
 @tool
-def bandpass(signal: list | np.ndarray, fs: float, low: float, high: float, order: int = 4) -> list:
-    """Bandpass filter a signal with a Butterworth design."""
-    return (
-        SignalProcessingTools().bandpass(np.asarray(signal), fs=fs, low=low, high=high, order=order).tolist()
-    )
+def bandpass(signal: list | np.ndarray, fs: float, low: float, high: float, order: int = 4) -> np.ndarray:
+    """Bandpass filter a signal with a Butterworth design.
+    
+    Args:
+        signal: The input signal to filter.
+        fs: Sampling frequency.
+        low: Low cutoff frequency.
+        high: High cutoff frequency.
+        order: Filter order.
+    """
+    return SignalProcessingTools().bandpass(np.asarray(signal), fs=fs, low=low, high=high, order=order)
 
 
 @register_tool("fft")
 @tool
-def fft(signal: list | np.ndarray) -> list:
-    """Magnitude FFT of ``signal``."""
-    return SignalProcessingTools().fft(np.asarray(signal)).tolist()
+def fft(signal: list | np.ndarray) -> np.ndarray:
+    """Magnitude FFT of ``signal``.
+    
+    Args:
+        signal: The input signal for FFT computation.
+    """
+    return SignalProcessingTools().fft(np.asarray(signal))
 
 
 @register_tool("cepstrum")
 @tool
-def cepstrum(signal: list | np.ndarray) -> list:
-    """Real cepstrum of ``signal``."""
-    return SignalProcessingTools().cepstrum(np.asarray(signal)).tolist()
+def cepstrum(signal: list | np.ndarray) -> np.ndarray:
+    """Real cepstrum of ``signal``.
+    
+    Args:
+        signal: The input signal for cepstrum computation.
+    """
+    return SignalProcessingTools().cepstrum(np.asarray(signal))
 
 
 @register_tool("envelope_spectrum")
 @tool
-def envelope_spectrum(signal: list | np.ndarray) -> list:
-    """Envelope spectrum via Hilbert transform."""
-    return SignalProcessingTools().envelope_spectrum(np.asarray(signal)).tolist()
+def envelope_spectrum(signal: list | np.ndarray) -> np.ndarray:
+    """Envelope spectrum via Hilbert transform.
+    
+    Args:
+        signal: The input signal for envelope spectrum computation.
+    """
+    return SignalProcessingTools().envelope_spectrum(np.asarray(signal))
 
 
 @register_tool("spectrogram")
 @tool
-def spectrogram(signal: list | np.ndarray, fs: float, nperseg: int = 256, noverlap: int | None = None) -> list:
-    """STFT magnitude spectrogram."""
-    return SignalProcessingTools().spectrogram(np.asarray(signal), fs=fs, nperseg=nperseg, noverlap=noverlap).tolist()
+def spectrogram(signal: list | np.ndarray, fs: float, nperseg: int = 256, noverlap: int | None = None) -> np.ndarray:
+    """STFT magnitude spectrogram.
+    
+    Args:
+        signal: The input signal for spectrogram computation.
+        fs: Sampling frequency.
+        nperseg: Length of each segment.
+        noverlap: Number of points to overlap between segments.
+    """
+    return SignalProcessingTools().spectrogram(np.asarray(signal), fs=fs, nperseg=nperseg, noverlap=noverlap)
 
 
 @register_tool("mel_spectrogram")
@@ -341,62 +374,102 @@ def mel_spectrogram(
     n_mels: int = 128,
     fmin: float = 0.0,
     fmax: float | None = None,
-) -> list:
-    """Mel scale spectrogram."""
-    return (
-        SignalProcessingTools()
-        .mel_spectrogram(
-            np.asarray(signal),
-            fs=fs,
-            nperseg=nperseg,
-            noverlap=noverlap,
-            n_mels=n_mels,
-            fmin=fmin,
-            fmax=fmax,
-        )
-        .tolist()
+) -> np.ndarray:
+    """Mel scale spectrogram.
+    
+    Args:
+        signal: The input signal for mel spectrogram computation.
+        fs: Sampling frequency.
+        nperseg: Length of each segment.
+        noverlap: Number of points to overlap between segments.
+        n_mels: Number of mel bands.
+        fmin: Lowest frequency.
+        fmax: Highest frequency.
+    """
+    return SignalProcessingTools().mel_spectrogram(
+        np.asarray(signal),
+        fs=fs,
+        nperseg=nperseg,
+        noverlap=noverlap,
+        n_mels=n_mels,
+        fmin=fmin,
+        fmax=fmax,
     )
 
 
 @register_tool("scalogram")
 @tool
-def scalogram(signal: list | np.ndarray, scales: list | None = None, wavelet_width: float = 5.0) -> list:
-    """Continuous wavelet transform magnitude."""
+def scalogram(signal: list | np.ndarray, scales: list | None = None, wavelet_width: float = 5.0) -> np.ndarray:
+    """Continuous wavelet transform magnitude.
+    
+    Args:
+        signal: The input signal for scalogram computation.
+        scales: The scales to use for the wavelet transform.
+        wavelet_width: Width of the wavelet.
+    """
     scales_arr = np.asarray(scales) if scales is not None else None
-    return SignalProcessingTools().scalogram(np.asarray(signal), scales=scales_arr, wavelet_width=wavelet_width).tolist()
+    return SignalProcessingTools().scalogram(np.asarray(signal), scales=scales_arr, wavelet_width=wavelet_width)
 
 
 @register_tool("gramian_angular_field")
 @tool
-def gramian_angular_field(signal: list | np.ndarray) -> list:
-    """Gramian Angular Field."""
-    return SignalProcessingTools().gramian_angular_field(np.asarray(signal)).tolist()
+def gramian_angular_field(signal: list | np.ndarray) -> np.ndarray:
+    """Gramian Angular Field.
+    
+    Args:
+        signal: The input signal for Gramian Angular Field computation.
+    """
+    return SignalProcessingTools().gramian_angular_field(np.asarray(signal))
 
 
 @register_tool("markov_transition_field")
 @tool
-def markov_transition_field(signal: list | np.ndarray, bins: int = 8) -> list:
-    """Markov Transition Field."""
-    return SignalProcessingTools().markov_transition_field(np.asarray(signal), bins=bins).tolist()
+def markov_transition_field(signal: list | np.ndarray, bins: int = 8) -> np.ndarray:
+    """Markov Transition Field.
+    
+    Args:
+        signal: The input signal for Markov Transition Field computation.
+        bins: Number of bins for quantization.
+    """
+    return SignalProcessingTools().markov_transition_field(np.asarray(signal), bins=bins)
 
 
 @register_tool("recurrence_plot")
 @tool
-def recurrence_plot(signal: list | np.ndarray, eps: float | None = None) -> list:
-    """Recurrence plot of a signal."""
-    return SignalProcessingTools().recurrence_plot(np.asarray(signal), eps=eps).tolist()
+def recurrence_plot(signal: list | np.ndarray, eps: float | None = None) -> np.ndarray:
+    """Recurrence plot of a signal.
+    
+    Args:
+        signal: The input signal for recurrence plot computation.
+        eps: Threshold for recurrence.
+    """
+    return SignalProcessingTools().recurrence_plot(np.asarray(signal), eps=eps)
 
 
 @register_tool("cepstrogram")
 @tool
-def cepstrogram(signal: list | np.ndarray, fs: float, nperseg: int = 256, noverlap: int | None = None) -> list:
-    """Cepstrum over time."""
-    return SignalProcessingTools().cepstrogram(np.asarray(signal), fs=fs, nperseg=nperseg, noverlap=noverlap).tolist()
+def cepstrogram(signal: list | np.ndarray, fs: float, nperseg: int = 256, noverlap: int | None = None) -> np.ndarray:
+    """Cepstrum over time.
+    
+    Args:
+        signal: The input signal for cepstrogram computation.
+        fs: Sampling frequency.
+        nperseg: Length of each segment.
+        noverlap: Number of points to overlap between segments.
+    """
+    return SignalProcessingTools().cepstrogram(np.asarray(signal), fs=fs, nperseg=nperseg, noverlap=noverlap)
 
 
 @register_tool("envelope_spectrogram")
 @tool
-def envelope_spectrogram(signal: list | np.ndarray, fs: float, nperseg: int = 256, noverlap: int | None = None) -> list:
-    """Spectrogram of the Hilbert envelope."""
-    return SignalProcessingTools().envelope_spectrogram(np.asarray(signal), fs=fs, nperseg=nperseg, noverlap=noverlap).tolist()
+def envelope_spectrogram(signal: list | np.ndarray, fs: float, nperseg: int = 256, noverlap: int | None = None) -> np.ndarray:
+    """Spectrogram of the Hilbert envelope.
+    
+    Args:
+        signal: The input signal for envelope spectrogram computation.
+        fs: Sampling frequency.
+        nperseg: Length of each segment.
+        noverlap: Number of points to overlap between segments.
+    """
+    return SignalProcessingTools().envelope_spectrogram(np.asarray(signal), fs=fs, nperseg=nperseg, noverlap=noverlap)
 

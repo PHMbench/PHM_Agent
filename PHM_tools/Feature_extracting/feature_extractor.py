@@ -225,15 +225,24 @@ class FeatureExtractorTools:
 
 @register_tool("extract_time_features")
 @tool
-def extract_time_features_tool(signal: list | np.ndarray) -> Dict[str, list]:
-    """Wrapper around :class:`FeatureExtractorTools.extract_time_features`."""
-    feats = FeatureExtractorTools().extract_time_features(np.asarray(signal))
-    return {k: v.tolist() for k, v in feats.items()}
+def extract_time_features_tool(signal: list | np.ndarray) -> Dict[str, np.ndarray]:
+    """Wrapper around :class:`FeatureExtractorTools.extract_time_features`.
+
+    Args:
+        signal: Input signal as a list or NumPy array.
+    """
+    return FeatureExtractorTools().extract_time_features(np.asarray(signal))
 
 
 @register_tool("extract_frequency_features")
 @tool
-def extract_frequency_features_tool(signal: list | np.ndarray, fs: float = 1.0) -> Dict[str, list]:
-    """Wrapper around :class:`FeatureExtractorTools.extract_frequency_features`."""
-    feats = FeatureExtractorTools().extract_frequency_features(np.asarray(signal), fs=fs)
-    return {k: v.tolist() for k, v in feats.items()}
+def extract_frequency_features_tool(
+    signal: list | np.ndarray, fs: float = 1.0
+) -> Dict[str, np.ndarray]:
+    """Wrapper around :class:`FeatureExtractorTools.extract_frequency_features`.
+
+    Args:
+        signal: Input signal as a list or NumPy array.
+        fs: Sampling frequency. Defaults to ``1.0``.
+    """
+    return FeatureExtractorTools().extract_frequency_features(np.asarray(signal), fs=fs)
