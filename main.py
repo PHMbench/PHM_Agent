@@ -6,11 +6,12 @@ import argparse
 
 
 from agents_config import create_manager_agent
-
 from model_config import configure_model
 
+from smolagents import GradioUI
 
-def main(inference: str = "inference_client", inspect: bool = False) -> None:
+
+def main(inference: str = "inference_client", inspect: bool = False, ui: bool = False) -> None:
     """Run a demo workflow using smolagents.
 
     Parameters
@@ -19,6 +20,8 @@ def main(inference: str = "inference_client", inspect: bool = False) -> None:
         Inference backend name accepted by :func:`configure_model`.
     inspect:
         Whether to enable OpenInference tracing.
+    ui:
+        Launch a Gradio web UI instead of running a single query.
     """
     if inspect:
         from openinference.instrumentation.smolagents import SmolagentsInstrumentor
@@ -29,6 +32,10 @@ def main(inference: str = "inference_client", inspect: bool = False) -> None:
 
     model = configure_model(inference)
     manager_agent = create_manager_agent(model)
+
+    if ui:
+        GradioUI(manager_agent).launch()
+        return
 
     run_result = manager_agent.run(
         "If the US keeps it 2024 growth rate, how many years would it take for the GDP to double?"
@@ -48,5 +55,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--inspect", action="store_true", help="Enable OpenInference instrumentation"
     )
+    parser.add_argument(
+        "--ui", action="store_true", help="Launch a Gradio web UI"
+    )
     args = parser.parse_args()
-    main(args.inference, args.inspect)
+    main(args.inference, args.inspect, args.ui)

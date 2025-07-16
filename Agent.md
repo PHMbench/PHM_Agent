@@ -18,6 +18,9 @@ AgentCls = get_agent("PHMAgent")
 agent = AgentCls(tools=[FeatureTools(), SignalTools()], model=model)
 ```
 
+Additional tools such as `RetrieverTool` can be loaded via the registry and
+passed to the agent to enable knowledge retrieval.
+
 All tools operate on `(B, L, C)` arrays, automatically expanding lower-dimensional inputs. The
 `model_config.py` module exposes a `configure_model()` function which returns a model instance based on
 the selected inference backend. Use it to create agents consistent with the demos under
