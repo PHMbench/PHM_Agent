@@ -5,6 +5,7 @@ from __future__ import annotations
 from smolagents import CodeAgent, ToolCallingAgent, VisitWebpageTool, WebSearchTool
 from smolagents.models import Model
 
+from PHM_tools.Retrieval.retriever import create_retriever_tool
 from utils.registry import get_agent, get_tool
 
 
@@ -38,9 +39,9 @@ def create_manager_agent(model: Model) -> CodeAgent:
     )
 
     # Retrieval agent utilizing semantic search
-    RetrieverTool = get_tool("RetrieverTool")
+    retriever_tool = create_retriever_tool()
     retrieval_agent = ToolCallingAgent(
-        tools=[RetrieverTool()],
+        tools=[retriever_tool],
         model=model,
         name="retrieval_agent",
         description="Agent that performs document retrieval via vector search.",
@@ -55,3 +56,19 @@ def create_manager_agent(model: Model) -> CodeAgent:
         return_full_result=True,
     )
     return manager_agent
+
+
+# def create_rag_agent(model: Model, vector_store) -> CodeAgent:
+#     """Return a simple RAG agent using :class:`RetrieverTool`."""
+
+#     RetrieverTool = get_tool("RetrieverTool")
+#     retriever = RetrieverTool(vector_store)
+
+#     rag_agent = CodeAgent(
+#         tools=[retriever],
+#         model=model,
+#         max_steps=4,
+#         verbosity_level=2,
+#         stream_outputs=True,
+#     )
+#     return rag_agent

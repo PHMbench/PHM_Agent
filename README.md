@@ -66,6 +66,12 @@ python main.py --inspect
 The `--inspect` flag enables OpenInference tracing via Phoenix so that you can
 observe detailed metrics about each agent run.
 
+To experiment interactively, launch the Gradio interface:
+
+```bash
+python -m UI.gradio_app
+```
+
 
 ## Agent Configuration
 
@@ -93,3 +99,17 @@ query.
 ```bash
 python demo/gradio_app.py
 ```
+## Retrieval-Augmented Generation
+
+`RetrieverTool` provides semantic search over a small documentation corpus using
+Chroma. Use `build_vector_store()` to create the vector store and pass it to the
+tool when constructing an agent.
+
+```python
+from PHM_tools.RAG import build_vector_store, RetrieverTool
+
+vector_store = build_vector_store()
+retriever = RetrieverTool(vector_store)
+```
+
+The tool is registered and can be obtained via `get_tool("RetrieverTool")`.

@@ -22,3 +22,18 @@ All tools operate on `(B, L, C)` arrays, automatically expanding lower-dimension
 `model_config.py` module exposes a `configure_model()` function which returns a model instance based on
 the selected inference backend. Use it to create agents consistent with the demos under
 `smolagents-referance/examples`.
+
+## Gradio UI
+
+Launch an interactive interface with `UI/gradio_app.py` to let the agent plan and
+execute tools step by step.
+
+```bash
+python -m UI.gradio_app
+```
+
+## Retrieval Tool
+
+The repository also includes a `RetrieverTool` that performs semantic search over
+a small documentation corpus using Chroma. Build a vector store with
+`build_vector_store()` and pass it when creating the tool.
