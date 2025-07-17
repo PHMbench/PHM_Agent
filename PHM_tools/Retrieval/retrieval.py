@@ -32,6 +32,11 @@ class RetrieverTool(Tool):
     output_type = "string"
 
     def __init__(self, vector_store: Chroma, **kwargs) -> None:
+        """Initialize the tool.
+
+        Args:
+            vector_store: Prebuilt vector store used for similarity search.
+        """
         super().__init__(**kwargs)
         self.vector_store = vector_store
 

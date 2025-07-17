@@ -10,10 +10,9 @@ Tools and agents are registered with simple decorators for easy discovery.
 ```python
 from utils.registry import register_tool, register_agent
 
-@register_tool("FeatureExtractorTools")
-class FeatureExtractorTools:
+@register_tool("extract_time_features")
+def extract_time_features(signal: list[float]) -> dict:
     ...
-
 @register_agent("PHMAgent")
 class PHMAgent(ToolCallingAgent):
     ...
@@ -31,7 +30,7 @@ channel dimensions without reshaping the input.
 
 ## Signal Processing Functions
 
-`SignalProcessingTools` exposes a number of 1‑D and 2‑D preprocessing utilities
+The signal processing module exposes a number of 1‑D and 2‑D preprocessing utilities
 often used in PHM research. The most notable ones are:
 
 - `normalize`, `detrend`, `bandpass`
@@ -39,6 +38,14 @@ often used in PHM research. The most notable ones are:
 - `spectrogram`, `mel_spectrogram`, `scalogram`
 - `gramian_angular_field`, `markov_transition_field`, `recurrence_plot`
 - `cepstrogram`, `envelope_spectrogram`
+
+## Decision-Making Tools
+
+Simple machine-learning helpers are provided for anomaly detection and fault
+diagnosis:
+
+- `isolation_forest_detector` for unsupervised anomaly detection
+- `svm_fault_classifier` for supervised fault classification
 
 Each function accepts arrays with shape `(B, L, C)` and returns either a
 processed signal of the same shape or a 2‑D representation of shape
@@ -52,6 +59,9 @@ showing how to instantiate a model and agent using these tools.
 Chroma vector store. Build the store with
 `PHM_tools.Retrieval.build_vector_store()` and pass a `RetrieverTool` instance to
 an agent.
+
+The repository also exposes `model_download_tool` which returns the Hugging Face
+model with the highest download count for a given pipeline task.
 
 ## Demo
 
