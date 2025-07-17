@@ -36,6 +36,14 @@ class RetrieverTool(Tool):
         self.vector_store = vector_store
 
     def forward(self, query: str) -> str:
+        """Return documentation snippets relevant to ``query``.
+
+        Args:
+            query: Search query string.
+
+        Returns:
+            Concatenated text from the top retrieved documents.
+        """
         assert isinstance(query, str), "Your search query must be a string"
         docs = self.vector_store.similarity_search(query, k=3)
         return "\nRetrieved documents:\n" + "".join(
