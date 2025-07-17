@@ -5,11 +5,10 @@ from __future__ import annotations
 from typing import Dict
 
 import numpy as np
-import scipy.signal
 import scipy.stats
 from smolagents import tool
 
-from PHM_tools.Signal_processing.utils import ensure_3d
+from utils import ensure_3d
 from utils.registry import register_tool
 
 

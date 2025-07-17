@@ -7,7 +7,7 @@ import numpy as np
 import scipy.signal
 from smolagents import tool
 
-from ..utils import ensure_3d
+from utils import ensure_3d
 from utils.registry import register_tool
 
 

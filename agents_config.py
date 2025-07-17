@@ -27,9 +27,9 @@ def create_manager_agent(model: Model) -> CodeAgent:
     )
 
     # PHM analysis agent using registered tools
-    time_feat = get_tool("extract_time_features")()
-    freq_feat = get_tool("extract_frequency_features")()
-    normalize_tool = get_tool("normalize")()
+    time_feat = get_tool("extract_time_features")
+    freq_feat = get_tool("extract_frequency_features")
+    normalize_tool = get_tool("normalize")
     PHMAgentCls = ToolCallingAgent  # get_agent("PHMAgent")
     phm_agent = PHMAgentCls(
         tools=[time_feat, freq_feat, normalize_tool],

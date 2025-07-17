@@ -1,6 +1,6 @@
 """Signal preprocessing tools for PHM_Agent."""
 
-from .1D_SP import (
+from .SP_1D import (
     normalize,
     detrend,
     bandpass,
@@ -8,7 +8,7 @@ from .1D_SP import (
     cepstrum,
     envelope_spectrum,
 )
-from .2D_SP import (
+from .SP_2D import (
     spectrogram,
     mel_spectrogram,
     scalogram,

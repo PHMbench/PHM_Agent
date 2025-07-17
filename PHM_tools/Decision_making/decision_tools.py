@@ -15,7 +15,7 @@ from utils.registry import register_tool
 @register_tool("isolation_forest_detector")
 @tool
 def isolation_forest_detector(
-    data: Iterable[Iterable[float]] | np.ndarray,
+    data: list | np.ndarray,
     contamination: float = 0.1,
     random_state: int | None = None,
 ) -> np.ndarray:
@@ -37,9 +37,9 @@ def isolation_forest_detector(
 @register_tool("svm_fault_classifier")
 @tool
 def svm_fault_classifier(
-    x_train: Iterable[Iterable[float]] | np.ndarray,
-    y_train: Iterable[int] | np.ndarray,
-    x_test: Iterable[Iterable[float]] | np.ndarray,
+    x_train: list | np.ndarray,
+    y_train: list | np.ndarray,
+    x_test: list | np.ndarray,
     kernel: str = "rbf",
     c: float = 1.0,
 ) -> np.ndarray:
