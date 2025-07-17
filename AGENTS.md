@@ -63,3 +63,17 @@ This allows the agent to move from a purely data-driven approach to a more **hyp
 ## 5. Required Tools & Functions
 
 To be effective, the Codex agent requires a dedicated Python script containing specialized functions.
+
+### Tool Authoring Guidelines
+
+Every function or class registered as a tool should follow these conventions:
+
+- Use a descriptive ``name`` so the agent clearly understands the tool's
+  purpose. For example, a helper returning the most downloaded model for a task
+  should be named ``model_download_tool``.
+- Add Python type hints for all inputs and for the return value so the agent
+  knows exactly what data to provide and what will be returned.
+- Provide a concise docstring describing what the tool does and include an
+  ``Args:`` section explaining each parameter. The tool's ``name`` and this
+  description are embedded into the agent's system prompt, so write them as
+  clear instructions for the LLM powering the agent.
