@@ -11,12 +11,13 @@ from smolagents import InferenceClientModel
 from utils.registry import get_agent, get_tool
 
 model = InferenceClientModel()
-FeatureTools = get_tool("FeatureExtractorTools")
-SignalTools = get_tool("SignalProcessingTools")
+time_feat = get_tool("extract_time_features")
+freq_feat = get_tool("extract_frequency_features")
+normalize = get_tool("normalize")
 AgentCls = get_agent("PHMAgent")
-
-agent = AgentCls(tools=[FeatureTools(), SignalTools()], model=model)
+agent = AgentCls(tools=[time_feat(), freq_feat(), normalize()], model=model)
 ```
+
 
 Additional tools such as `RetrieverTool` can be loaded via the registry and
 passed to the agent to enable knowledge retrieval.
