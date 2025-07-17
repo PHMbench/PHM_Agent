@@ -17,7 +17,11 @@ from utils.registry import register_tool
 
 @register_tool("RetrieverTool")
 class RetrieverTool(Tool):
-    """Semantic search over a Chroma vector store."""
+    """Semantic search over a Chroma vector store.
+
+    Args:
+        vector_store: Chroma instance containing the indexed documents.
+    """
 
     name = "retriever"
     description = (
@@ -36,6 +40,14 @@ class RetrieverTool(Tool):
         self.vector_store = vector_store
 
     def forward(self, query: str) -> str:
+        """Return documentation snippets relevant to ``query``.
+
+        Args:
+            query: Search query string.
+
+        Returns:
+            Concatenated text from the top retrieved documents.
+        """
         assert isinstance(query, str), "Your search query must be a string"
         docs = self.vector_store.similarity_search(query, k=3)
         return "\nRetrieved documents:\n" + "".join(
@@ -48,7 +60,14 @@ class RetrieverTool(Tool):
 # ---------------------------------------------------------------------------
 
 def build_vector_store(persist_directory: str = "./chroma_db") -> Chroma:
-    """Build and return a Chroma vector store from the Hugging Face docs dataset."""
+    """Build and return a Chroma vector store from the Hugging Face docs dataset.
+
+    Args:
+        persist_directory: Directory where the database is stored.
+
+    Returns:
+        A populated Chroma vector store.
+    """
     knowledge_base = datasets.load_dataset("m-ric/huggingface_doc", split="train")
 
     source_docs: List[Document] = [
@@ -80,6 +99,13 @@ def build_vector_store(persist_directory: str = "./chroma_db") -> Chroma:
 
 
 def create_retriever_tool(persist_directory: str = "./chroma_db") -> RetrieverTool:
-    """Utility to build the vector store and return a ready-to-use tool."""
+    """Utility to build the vector store and return a ready-to-use tool.
+
+    Args:
+        persist_directory: Directory where the database is stored.
+
+    Returns:
+        Instance of :class:`RetrieverTool` wired to the vector store.
+    """
     vector_store = build_vector_store(persist_directory=persist_directory)
     return RetrieverTool(vector_store)
