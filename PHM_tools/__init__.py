@@ -21,6 +21,7 @@ from .Signal_processing import (
     envelope_spectrogram,
 )
 from .Decision_making import isolation_forest_detector, svm_fault_classifier
+from .model_download import model_download_tool
 from .Retrieval import RetrieverTool, build_vector_store, create_retriever_tool
 
 __all__ = [
@@ -42,6 +43,7 @@ __all__ = [
     "envelope_spectrogram",
     "isolation_forest_detector",
     "svm_fault_classifier",
+    "model_download_tool",
     "RetrieverTool",
     "build_vector_store",
     "create_retriever_tool",

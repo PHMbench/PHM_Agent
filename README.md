@@ -60,6 +60,9 @@ Chroma vector store. Build the store with
 `PHM_tools.Retrieval.build_vector_store()` and pass a `RetrieverTool` instance to
 an agent.
 
+The repository also exposes `model_download_tool` which returns the Hugging Face
+model with the highest download count for a given pipeline task.
+
 ## Demo
 
 Run `main.py` to launch a small multi-agent workflow. The script mirrors the
