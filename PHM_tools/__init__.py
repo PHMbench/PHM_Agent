@@ -43,7 +43,6 @@ __all__ = [
     "envelope_spectrogram",
     "isolation_forest_detector",
     "svm_fault_classifier",
-    "model_download_tool",
     "RetrieverTool",
     "build_vector_store",
     "create_retriever_tool",

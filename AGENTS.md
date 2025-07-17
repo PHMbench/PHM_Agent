@@ -75,9 +75,7 @@ Every function or class registered as a tool should follow these conventions:
 - Provide a concise docstring including an ``Args:`` section that explains each
   argument. The description and name become part of the agent's prompt, so keep
   them clear and informative.
-
-### Available Tools
-
-Alongside signal-processing and feature-extraction utilities, this repository
-provides a helper function ``model_download_tool``. It returns the Hugging Face
-model with the highest number of downloads for a specified pipeline task.
+- Document input and output types using type hints so the agent knows how to
+  invoke each tool.
+- Keep the description explicit because it will be embedded directly into the
+  system prompt powering the agent.

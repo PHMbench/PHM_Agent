@@ -17,7 +17,11 @@ from utils.registry import register_tool
 
 @register_tool("RetrieverTool")
 class RetrieverTool(Tool):
-    """Semantic search over a vector store."""
+    """Semantic search over a vector store.
+
+    Args:
+        vector_store: Chroma database for document similarity search.
+    """
 
     name = "retriever"
     description = (
@@ -47,7 +51,14 @@ class RetrieverTool(Tool):
 
 
 def load_default_vector_store(persist_directory: str = "./chroma_db") -> Chroma:
-    """Load the demo knowledge base as a Chroma vector store."""
+    """Load the demo knowledge base as a Chroma vector store.
+
+    Args:
+        persist_directory: Directory for persisting the vector store.
+
+    Returns:
+        Initialized Chroma instance.
+    """
     knowledge_base = datasets.load_dataset("m-ric/huggingface_doc", split="train")
     source_docs = [
         Document(page_content=doc["text"], metadata={"source": doc["source"].split("/")[1]})
@@ -76,6 +87,13 @@ def load_default_vector_store(persist_directory: str = "./chroma_db") -> Chroma:
 
 
 def create_retriever_tool(persist_directory: str = "./chroma_db") -> RetrieverTool:
-    """Convenience function building a :class:`RetrieverTool`."""
+    """Convenience function building a :class:`RetrieverTool`.
+
+    Args:
+        persist_directory: Directory for persisting the vector store.
+
+    Returns:
+        :class:`RetrieverTool` connected to the vector store.
+    """
     store = load_default_vector_store(persist_directory)
     return RetrieverTool(store)
