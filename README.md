@@ -123,3 +123,29 @@ retriever = RetrieverTool(vector_store)
 ```
 
 The tool is registered and can be obtained via `get_tool("RetrieverTool")`.
+
+## Benchmark Dataset and Local Knowledge Base
+
+The `benchmark` module lets you create a tiny synthetic dataset in HDF5 format
+for experimentation. Use `create_example_dataset` to generate the files and then
+instantiate `BenchmarkDataset` to load samples by ID:
+
+```python
+from benchmark import BenchmarkDataset, create_example_dataset
+
+metadata_path = create_example_dataset("tmp/data")
+dataset = BenchmarkDataset(metadata_path)
+sample = dataset.load(0)
+metadata = dataset.metadata
+```
+
+For retrieval over your own PDF or Markdown documents, build a local vector
+store and tool:
+
+```python
+from PHM_tools.Retrieval import create_local_retriever_tool
+retriever = create_local_retriever_tool("knowledge_base")
+```
+
+See `tutorial/phm_agent_tutorial.md` for a short walkthrough and
+`demo/existing_data_demo.py` for a runnable example combining both utilities.
