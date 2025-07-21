@@ -1,7 +1,9 @@
 """Model configuration helpers following smolagents examples."""
 
 from typing import Literal
+from dotenv import load_dotenv
 
+load_dotenv(override=True)
 from smolagents import (
     InferenceClientModel,
     LiteLLMModel,
@@ -35,7 +37,7 @@ def configure_model(
             num_ctx=8192,
         )
     if inference == "litellm":
-        return LiteLLMModel(model_id="gpt-4o")
+        return LiteLLMModel(model_id="gemini")
     if inference == "openai":
         return OpenAIServerModel(model_id="gpt-4o")
     raise ValueError(f"Unknown inference type: {inference}")
