@@ -206,3 +206,7 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 chroma_db/
+
+# Benchmark data
+benchmark/data/*.h5
+knowledge_base/*.pdf
