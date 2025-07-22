@@ -13,7 +13,7 @@ from smolagents import (
     tool,
 )
 from smolagents.models import Model
-
+import os
 
 def configure_model(
     inference: Literal[
@@ -37,7 +37,8 @@ def configure_model(
             num_ctx=8192,
         )
     if inference == "litellm":
-        return LiteLLMModel(model_id="gemini")
+        api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+        return LiteLLMModel(model_id="gemini/gemini-2.5-pro", api_key=api_key)
     if inference == "openai":
         return OpenAIServerModel(model_id="gpt-4o")
     raise ValueError(f"Unknown inference type: {inference}")

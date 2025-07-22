@@ -17,6 +17,7 @@ networkx
 matplotlib
 PyPDF2
 smolagents[all]
+smolagents[telemetry]
 google-adk 
 litellm
 langchain

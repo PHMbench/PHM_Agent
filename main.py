@@ -13,6 +13,19 @@ from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
+# # --- 调试代码开始 ---
+
+# import os # <--- 添加导入
+# import sys # <--- 添加导入
+# api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+# if not api_key:
+#     print("错误：未能在环境变量中找到 GEMINI_API_KEY 或 GOOGLE_API_KEY。", file=sys.stderr)
+#     sys.exit(1)
+# else:
+#     print("成功加载 API 密钥。")
+# # --- 调试代码结束 ---
+
+
 def main(inference: str = "inference_client", inspect: bool = False, ui: bool = False) -> None:
     """Run a demo workflow using smolagents.
 
@@ -49,16 +62,16 @@ def main(inference: str = "inference_client", inspect: bool = False, ui: bool = 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run the PHM agent demo")
     parser.add_argument(
-        "--litellm",
-        default="inference_client",
+        "--inference",
+        default="litellm",
         choices=["inference_client", "transformers", "ollama", "litellm", "openai"],
         help="Select inference backend",
     )
     parser.add_argument(
-        "--inspect", action="store_true", help="Enable OpenInference instrumentation"
+        "--inspect", action="store_false", help="Enable OpenInference instrumentation"
     )
     parser.add_argument(
-        "--ui", action="store_true", help="Launch a Gradio web UI"
+        "--ui", action="store_false", help="Launch a Gradio web UI"
     )
     args = parser.parse_args()
     main(args.inference, args.inspect, args.ui)
