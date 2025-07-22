@@ -6,8 +6,7 @@ from smolagents.agents import MultiStepAgent
 from smolagents.monitoring import LogLevel
 
 
-# Import fixture modules as plugins
-pytest_plugins = ["tests.fixtures.agents", "tests.fixtures.tools"]
+# Import fixture modules as plugins (registered in repository root)
 
 original_multi_step_agent_init = MultiStepAgent.__init__
 
