@@ -23,3 +23,5 @@ litellm
 langchain
 langchain_chroma
 langchain_huggingface
+openpyxl
+xlrd
