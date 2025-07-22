@@ -126,15 +126,18 @@ The tool is registered and can be obtained via `get_tool("RetrieverTool")`.
 
 ## Benchmark Dataset and Local Knowledge Base
 
-The `benchmark` module lets you create a tiny synthetic dataset in HDF5 format
-for experimentation. Use `create_example_dataset` to generate the files and then
-instantiate `BenchmarkDataset` to load samples by ID:
+`benchmark` provides utilities to create and load a small demo dataset stored as
+HDF5 files. First generate the data:
+
+```bash
+python benchmark/generate_dummy_data.py
+```
+
+Then use `BenchmarkDataset` to access the files by ID:
 
 ```python
-from benchmark import BenchmarkDataset, create_example_dataset
-
-metadata_path = create_example_dataset("tmp/data")
-dataset = BenchmarkDataset(metadata_path)
+from benchmark import BenchmarkDataset
+dataset = BenchmarkDataset("benchmark/data/metadata.csv")
 sample = dataset.load(0)
 metadata = dataset.metadata
 ```

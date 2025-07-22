@@ -4,15 +4,19 @@ from __future__ import annotations
 
 from smolagents import CodeAgent, LiteLLMModel
 
-from benchmark import BenchmarkDataset, create_example_dataset
+from benchmark import BenchmarkDataset
 from PHM_tools.Retrieval.local_knowledge import create_local_retriever_tool
+from pathlib import Path
+import subprocess
 from utils.registry import get_tool
 
 
 def main() -> None:
     model = LiteLLMModel(model_id="gpt-4o")
-    metadata = create_example_dataset("tmp/demo_data")
-    dataset = BenchmarkDataset(metadata)
+    data_path = Path("benchmark/data/0.h5")
+    if not data_path.exists():
+        subprocess.run(["python", "benchmark/generate_dummy_data.py"], check=True)
+    dataset = BenchmarkDataset("benchmark/data/metadata.csv")
     signal = dataset.load(0)
     retriever = create_local_retriever_tool("knowledge_base")
 
