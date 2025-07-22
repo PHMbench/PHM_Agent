@@ -9,6 +9,19 @@ from PHM_tools.Retrieval.retriever import create_retriever_tool
 from utils.registry import get_agent, get_tool
 
 
+def create_report_agent(model: Model) -> ToolCallingAgent:
+    """Return an expert agent for PHM research report writing."""
+
+    return ToolCallingAgent(
+        tools=[WebSearchTool(), VisitWebpageTool()],
+        model=model,
+        name="report_agent",
+        description="Agent specialized in autonomous PHM research and report generation.",
+        return_full_result=True,
+        add_base_tools=True,
+    )
+
+
 def create_manager_agent(model: Model) -> CodeAgent:
     """Return a manager agent with preconfigured sub-agents.
 
@@ -51,11 +64,14 @@ def create_manager_agent(model: Model) -> CodeAgent:
         add_base_tools=True,
     )
 
-    # Manager agent orchestrating both sub agents
+    # Report writing agent
+    report_agent = create_report_agent(model)
+
+    # Manager agent orchestrating sub agents
     manager_agent = CodeAgent(
         tools=[],
         model=model,
-        managed_agents=[search_agent, phm_agent, retrieval_agent],
+        managed_agents=[search_agent, phm_agent, retrieval_agent, report_agent],
         return_full_result=True,
         add_base_tools=True,
     )
