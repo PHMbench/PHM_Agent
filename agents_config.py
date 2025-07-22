@@ -76,3 +76,33 @@ def create_manager_agent(model: Model) -> CodeAgent:
 #         stream_outputs=True,
 #     )
 #     return rag_agent
+
+
+def create_report_agent(model: Model) -> CodeAgent:
+    """Return an agent specialized in PHM report writing."""
+    search_agent = ToolCallingAgent(
+        tools=[WebSearchTool(), VisitWebpageTool()],
+        model=model,
+        name="research_agent",
+        description="Performs web searches and gathers information.",
+        return_full_result=True,
+    )
+    retrieval_tool = create_retriever_tool()
+    retrieval_agent = ToolCallingAgent(
+        tools=[retrieval_tool],
+        model=model,
+        name="retrieval_agent",
+        description="Retrieves documents from the knowledge base.",
+        return_full_result=True,
+        add_base_tools=True,
+    )
+    report_agent = CodeAgent(
+        tools=[],
+        model=model,
+        managed_agents=[search_agent, retrieval_agent],
+        name="report_agent",
+        description="Expert PHM research report writer.",
+        return_full_result=True,
+        add_base_tools=True,
+    )
+    return report_agent
