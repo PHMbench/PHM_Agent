@@ -127,6 +127,36 @@ class EnhancedGradioUI(GradioUI):
                         [provider, model_id, api_key, session_state],
                         [status],
                     )
+                with gr.Accordion("Dataset", open=False):
+                    metadata_file = gr.File(label="Metadata (.xls/.xlsx)")
+                    data_file = gr.File(label="Data (.h5)")
+                    metadata_table = gr.DataFrame(label="Metadata")
+                    id_select = gr.Dropdown(label="Select ID")
+                    plot_output = gr.Plot()
+                    run_btn = gr.Button("Run Agent")
+                    train_ids = gr.Textbox(label="Train IDs (comma separated)")
+                    val_ids = gr.Textbox(label="Validation IDs")
+                    test_ids = gr.Textbox(label="Test IDs")
+                    agent_output = gr.Textbox(label="Agent Output")
+
+                    metadata_file.change(
+                        self.init_dataset,
+                        [metadata_file, data_file],
+                        [metadata_table, session_state, id_select],
+                    )
+                    data_file.change(
+                        self.init_dataset,
+                        [metadata_file, data_file],
+                        [metadata_table, session_state, id_select],
+                    )
+                    id_select.change(
+                        self.plot_signal, [id_select, session_state], [plot_output]
+                    )
+                    run_btn.click(
+                        self.process_split,
+                        [train_ids, val_ids, test_ids, session_state],
+                        [agent_output],
+                    )
 
                 with gr.Group():
                     gr.Markdown("**Your request**", container=True)
@@ -147,9 +177,9 @@ class EnhancedGradioUI(GradioUI):
                         [upload_status, file_uploads_log],
                     )
 
-                gr.HTML(
-                    "<br><br><h4><center>Powered by <a target='_blank' href='https://github.com/huggingface/smolagents'><b>smolagents</b></a></center></h4>"
-                )
+                # gr.HTML(
+                #     "<br><br><h4><center>Powered by <a target='_blank' href='https://github.com/huggingface/smolagents'><b>smolagents</b></a></center></h4>"
+                # )
 
             chatbot = gr.Chatbot(
                 label="Agent",
@@ -270,7 +300,7 @@ class EnhancedGradioUI(GradioUI):
 
 
 def main() -> None:
-    model = LiteLLMModel(model_id="gemini/gemini-pro")
+    model = LiteLLMModel(model_id="gemini/gemini-2.5-pro")
     agent = create_manager_agent(model)
     ui = EnhancedGradioUI(agent, file_upload_folder="./uploads")
     ui.launch()
