@@ -1,6 +1,11 @@
 from __future__ import annotations
 
-"""Example PHM agent using the smolagents framework."""
+"""Predictive Health Management analysis agent.
+
+This agent acts as a professional PHM diagnostician. It dynamically
+selects from the registered PHM tools to process uploaded data, perform
+feature extraction and anomaly detection, and summarise the findings.
+"""
 
 from typing import Any
 
@@ -16,5 +21,18 @@ class PHMAgent(ToolCallingAgent):
     """Minimal agent registered for later retrieval."""
 
     def __init__(self, tools: list[Tool], model: Model, **kwargs: Any) -> None:
-        super().__init__(tools=tools, model=model, **kwargs)
+        instructions = (
+            "You are a predictive maintenance diagnostics expert. "
+            "Analyse sensor signals using the available PHM tools, "
+            "detect anomalies or faults and provide clear reasoning "
+            "behind your conclusions."
+        )
+        super().__init__(
+            tools=tools,
+            model=model,
+            name="phm_agent",
+            description="Expert agent for PHM signal analysis and diagnosis.",
+            instructions=instructions,
+            **kwargs,
+        )
 
