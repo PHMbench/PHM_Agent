@@ -1,0 +1,7 @@
+inference: litellm
+model_id: gemini/gemini-2.5-pro
+enabled_agents:
+  - search_agent
+  - phm_agent
+  - retrieval_agent
+  - deep_research_agent

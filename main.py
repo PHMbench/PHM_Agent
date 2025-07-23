@@ -1,43 +1,31 @@
-"""Entry point demonstrating a multi-agent workflow with optional instrumentation."""
-
 from __future__ import annotations
 
-import argparse
+"""Unified entry point for CLI and UI execution."""
 
+import argparse
+from dotenv import load_dotenv
 
 from agents_config import create_manager_agent
 from model_config import configure_model
-
-from smolagents import GradioUI
-from dotenv import load_dotenv
+from utils.config import load_config
+from UI.enhanced_ui import EnhancedGradioUI
 
 load_dotenv(override=True)
 
-# # --- 调试代码开始 ---
 
-# import os # <--- 添加导入
-# import sys # <--- 添加导入
-# api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
-# if not api_key:
-#     print("错误：未能在环境变量中找到 GEMINI_API_KEY 或 GOOGLE_API_KEY。", file=sys.stderr)
-#     sys.exit(1)
-# else:
-#     print("成功加载 API 密钥。")
-# # --- 调试代码结束 ---
-
-
-def main(inference: str = "inference_client", inspect: bool = False, ui: bool = False) -> None:
-    """Run a demo workflow using smolagents.
+def main(config: str = "config.yaml", inspect: bool = False, ui: bool = False) -> None:
+    """Run the PHM agent demo or launch the UI.
 
     Parameters
     ----------
-    inference:
-        Inference backend name accepted by :func:`configure_model`.
+    config:
+        Path to the YAML configuration file.
     inspect:
-        Whether to enable OpenInference tracing.
+        Enable OpenInference instrumentation when ``True``.
     ui:
-        Launch a Gradio web UI instead of running a single query.
+        Launch the Gradio interface instead of running a demo query.
     """
+    cfg = load_config(config)
     if inspect:
         from openinference.instrumentation.smolagents import SmolagentsInstrumentor
         from phoenix.otel import register
@@ -45,11 +33,15 @@ def main(inference: str = "inference_client", inspect: bool = False, ui: bool = 
         register()
         SmolagentsInstrumentor().instrument(skip_dep_check=True)
 
-    model = configure_model(inference)
-    manager_agent = create_manager_agent(model)
+    model = configure_model(cfg.inference, cfg.model_id)
+    manager_agent = create_manager_agent(model, cfg)
 
     if ui:
-        GradioUI(manager_agent).launch()
+        EnhancedGradioUI(
+            manager_agent,
+            file_upload_folder="./uploads",
+            config=cfg,
+        ).launch()
         return
 
     run_result = manager_agent.run(
@@ -61,17 +53,8 @@ def main(inference: str = "inference_client", inspect: bool = False, ui: bool = 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run the PHM agent demo")
-    parser.add_argument(
-        "--inference",
-        default="litellm",
-        choices=["inference_client", "transformers", "ollama", "litellm", "openai"],
-        help="Select inference backend",
-    )
-    parser.add_argument(
-        "--inspect", action="store_false", help="Enable OpenInference instrumentation"
-    )
-    parser.add_argument(
-        "--ui", action="store_false", help="Launch a Gradio web UI"
-    )
+    parser.add_argument("--config", default="config.yaml", help="Path to config YAML")
+    parser.add_argument("--inspect", action="store_true", help="Enable OpenInference instrumentation")
+    parser.add_argument("--ui", action="store_true", help="Launch a Gradio web UI")
     args = parser.parse_args()
-    main(args.inference, args.inspect, args.ui)
+    main(args.config, args.inspect, args.ui)

@@ -21,6 +21,16 @@ from .Signal_processing import (
     envelope_spectrogram,
 )
 from .Decision_making import isolation_forest_detector, svm_fault_classifier
+from .text_web_browser import (
+    SimpleTextBrowser,
+    VisitTool,
+    PageUpTool,
+    PageDownTool,
+    FinderTool,
+    FindNextTool,
+    ArchiveSearchTool,
+)
+from .text_inspector_tool import TextInspectorTool
 from .model_download import model_download_tool
 from .Retrieval import (
     RetrieverTool,
@@ -54,4 +64,12 @@ __all__ = [
     "create_retriever_tool",
     "build_local_vector_store",
     "create_local_retriever_tool",
+    "SimpleTextBrowser",
+    "VisitTool",
+    "PageUpTool",
+    "PageDownTool",
+    "FinderTool",
+    "FindNextTool",
+    "ArchiveSearchTool",
+    "TextInspectorTool",
 ]

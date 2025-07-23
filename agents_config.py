@@ -7,31 +7,31 @@ from smolagents.models import Model
 
 from PHM_tools.Retrieval.retriever import create_retriever_tool
 from utils.registry import get_agent, get_tool
+from Agent import create_deep_research_agent
 
+# ---------------------------------------------------------------------------
+# Sub-agent factories
+# ---------------------------------------------------------------------------
 
-def create_manager_agent(model: Model) -> CodeAgent:
-    """Return a manager agent with preconfigured sub-agents.
-
-    Parameters
-    ----------
-    model:
-        Model instance created via :func:`model_config.configure_model`.
-    """
-    # Search agent with web tools
-    search_agent = ToolCallingAgent(
+def _make_search_agent(model: Model) -> ToolCallingAgent:
+    """Return a simple web search assistant."""
+    return ToolCallingAgent(
         tools=[WebSearchTool(), VisitWebpageTool()],
         model=model,
         name="search_agent",
-        description="This agent can perform web searches and fetch webpages.",
+        description="Agent that performs targeted PHM web searches.",
+        instructions="Search online sources for PHM related data and articles.",
         return_full_result=True,
     )
 
-    # PHM analysis agent using registered tools
+
+def _make_phm_agent(model: Model) -> ToolCallingAgent:
+    """Return the PHM analysis agent from the registry."""
     time_feat = get_tool("extract_time_features")
     freq_feat = get_tool("extract_frequency_features")
     normalize_tool = get_tool("normalize")
-    PHMAgentCls = ToolCallingAgent  # get_agent("PHMAgent")
-    phm_agent = PHMAgentCls(
+    PHMAgentCls = get_agent("PHMAgent")
+    return PHMAgentCls(
         tools=[time_feat, freq_feat, normalize_tool],
         model=model,
         name="phm_agent",
@@ -40,22 +40,58 @@ def create_manager_agent(model: Model) -> CodeAgent:
         add_base_tools=True,
     )
 
-    # Retrieval agent utilizing semantic search
+
+def _make_retrieval_agent(model: Model) -> ToolCallingAgent:
+    """Return the document retrieval helper."""
     retriever_tool = create_retriever_tool()
-    retrieval_agent = ToolCallingAgent(
+    return ToolCallingAgent(
         tools=[retriever_tool],
         model=model,
         name="retrieval_agent",
         description="Agent that performs document retrieval via vector search.",
+        instructions="Use the retriever tool to access the knowledge base.",
         return_full_result=True,
         add_base_tools=True,
     )
 
-    # Manager agent orchestrating both sub agents
+
+AGENT_BUILDERS = {
+    "search_agent": _make_search_agent,
+    "phm_agent": _make_phm_agent,
+    "retrieval_agent": _make_retrieval_agent,
+    "deep_research_agent": create_deep_research_agent,
+}
+
+
+def create_manager_agent(model: Model, config=None) -> CodeAgent:
+    """Return a manager agent composed of configurable sub agents.
+
+    Parameters
+    ----------
+    model:
+        Model instance created via :func:`model_config.configure_model`.
+    config:
+        Optional configuration object with additional settings. Must contain
+        ``enabled_agents`` listing the agents to include.
+    """
+
+    enabled = getattr(
+        config,
+        "enabled_agents",
+        ["search_agent", "phm_agent", "retrieval_agent"],
+    )
+
+    sub_agents: list[ToolCallingAgent | CodeAgent] = [
+        AGENT_BUILDERS[name](model) for name in enabled if name in AGENT_BUILDERS
+    ]
+
     manager_agent = CodeAgent(
         tools=[],
         model=model,
-        managed_agents=[search_agent, phm_agent, retrieval_agent],
+        managed_agents=sub_agents,
+        name="manager_agent",
+        description="Orchestrates sub-agents to answer PHM queries.",
+        instructions="Coordinate all sub agents to deliver a complete PHM analysis.",
         return_full_result=True,
         add_base_tools=True,
     )
@@ -85,6 +121,7 @@ def create_report_agent(model: Model) -> CodeAgent:
         model=model,
         name="research_agent",
         description="Performs web searches and gathers information.",
+        instructions="Gather recent PHM publications and data from the web.",
         return_full_result=True,
     )
     retrieval_tool = create_retriever_tool()
@@ -93,6 +130,7 @@ def create_report_agent(model: Model) -> CodeAgent:
         model=model,
         name="retrieval_agent",
         description="Retrieves documents from the knowledge base.",
+        instructions="Search the knowledge base for relevant materials.",
         return_full_result=True,
         add_base_tools=True,
     )
@@ -102,6 +140,7 @@ def create_report_agent(model: Model) -> CodeAgent:
         managed_agents=[search_agent, retrieval_agent],
         name="report_agent",
         description="Expert PHM research report writer.",
+        instructions="Compose a clear PHM report summarising all findings.",
         return_full_result=True,
         add_base_tools=True,
     )
