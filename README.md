@@ -152,3 +152,31 @@ retriever = create_local_retriever_tool("knowledge_base")
 
 See `tutorial/phm_agent_tutorial.md` for a short walkthrough and
 `demo/existing_data_demo.py` for a runnable example combining both utilities.
+
+## Configuration
+
+Application behaviour is controlled via `config.yaml`. The file is parsed into a
+small `Config` dataclass (see `utils/config.py`) so fields can be accessed as
+attributes. In addition to selecting the inference backend and model
+identifier, you can list which sub-agents the manager should load:
+
+```yaml
+inference: litellm
+model_id: gemini/gemini-2.5-pro
+enabled_agents:
+  - search_agent
+  - phm_agent
+  - retrieval_agent
+  - deep_research_agent
+```
+
+Add or remove agent names from `enabled_agents` to customise the workflow. For
+example, including `deep_research_agent` enables an advanced helper that
+performs in-depth web searches before handing results to the PHM agent.
+
+## Documentation
+
+Documentation is built with Sphinx from the `docs/` directory. Only the minimal
+packages required to generate the HTML pages are listed in
+`docs/requirements.txt`. The included GitHub Actions workflow caches these
+packages to speed up builds.
