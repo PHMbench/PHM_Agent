@@ -1,7 +1,12 @@
-SPHINXBUILD ?= sphinx-build
-SOURCEDIR = source
-BUILDDIR = _build
+SPHINXOPTS    = -q
+SPHINXBUILD   = sphinx-build
+SOURCEDIR     = source
+BUILDDIR      = _build
 
-.PHONY: html
+.PHONY: html clean
+
 html:
-$(SPHINXBUILD) -M html $(SOURCEDIR) $(BUILDDIR)
+$(SPHINXBUILD) -b html $(SOURCEDIR) $(BUILDDIR)/html $(SPHINXOPTS)
+
+clean:
+rm -rf $(BUILDDIR)
