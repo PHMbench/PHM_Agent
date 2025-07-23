@@ -23,24 +23,25 @@ def configure_model(
         "litellm",
         "openai",
     ] = "inference_client",
+    model_id: str | None = None,
 ) -> Model:
     """Return a model instance for the chosen inference backend."""
     if inference == "inference_client":
-        return InferenceClientModel(model_id="meta-llama/Llama-3.3-70B-Instruct", provider="nebius")
+        return InferenceClientModel(model_id=model_id or "meta-llama/Llama-3.3-70B-Instruct", provider="nebius")
     if inference == "transformers":
-        return TransformersModel(model_id="HuggingFaceTB/SmolLM2-1.7B-Instruct", device_map="auto", max_new_tokens=1000)
+        return TransformersModel(model_id=model_id or "HuggingFaceTB/SmolLM2-1.7B-Instruct", device_map="auto", max_new_tokens=1000)
     if inference == "ollama":
         return LiteLLMModel(
-            model_id="ollama_chat/llama3.2",
+            model_id=model_id or "ollama_chat/llama3.2",
             api_base="http://localhost:11434",
             api_key="your-api-key",
             num_ctx=8192,
         )
     if inference == "litellm":
         api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
-        return LiteLLMModel(model_id="gemini/gemini-2.5-pro", api_key=api_key)
+        return LiteLLMModel(model_id=model_id or "gemini/gemini-2.5-pro", api_key=api_key)
     if inference == "openai":
-        return OpenAIServerModel(model_id="gpt-4o")
+        return OpenAIServerModel(model_id=model_id or "gpt-4o")
     raise ValueError(f"Unknown inference type: {inference}")
 
 
