@@ -25,3 +25,8 @@ def model_download_tool(task: str) -> str:
     if not models:
         raise ValueError(f"No models found for task '{task}'")
     return models[0].modelId
+
+
+if __name__ == "__main__":
+    result = model_download_tool("text-classification")
+    print("Top model id:", result)

@@ -21,3 +21,13 @@ __all__ = [
     "cepstrogram",
     "envelope_spectrogram",
 ]
+
+
+if __name__ == "__main__":
+    import numpy as np
+
+    sig = np.random.randn(256)
+    spec, _ = spectrogram(sig, fs=1000)
+    scal = scalogram(sig, fs=1000)
+    print("Spectrogram shape:", spec.shape)
+    print("Scalogram shape:", scal.shape)

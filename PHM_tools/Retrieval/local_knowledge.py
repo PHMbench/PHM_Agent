@@ -94,3 +94,14 @@ def create_local_retriever_tool(
     """
     store = build_local_vector_store(directory, persist_directory=persist_directory)
     return RetrieverTool(store)
+
+
+if __name__ == "__main__":
+    from tempfile import TemporaryDirectory
+
+    with TemporaryDirectory() as tmp:
+        path = Path(tmp) / "sample.txt"
+        path.write_text("simple demo document")
+        store = build_local_vector_store(tmp, persist_directory=tmp)
+        tool = RetrieverTool(store)
+        print(tool("demo"))
