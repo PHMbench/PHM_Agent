@@ -6,6 +6,10 @@ import argparse
 from dotenv import load_dotenv
 
 from agents_config import create_manager_agent
+import numpy as np
+import pandas as pd
+import h5py
+import tempfile
 from model_config import configure_model
 from utils.config import load_config
 from UI.enhanced_ui import EnhancedGradioUI
@@ -44,11 +48,24 @@ def main(config: str = "config.yaml", inspect: bool = False, ui: bool = False) -
         ).launch()
         return
 
-    run_result = manager_agent.run(
-        "If the US keeps it 2024 growth rate, how many years would it take for the GDP to double?"
-    )
-    print("Here is the token usage for the manager agent", run_result.token_usage)
-    print("Here are the timing informations for the manager agent:", run_result.timing)
+    with tempfile.NamedTemporaryFile("w", suffix=".csv", delete=False) as tmp_csv:
+        pd.DataFrame({"id": ["sample"], "label": ["normal"]}).to_csv(tmp_csv.name, index=False)
+        metadata_path = tmp_csv.name
+
+    with tempfile.NamedTemporaryFile(suffix=".h5", delete=False) as tmp_h5:
+        with h5py.File(tmp_h5.name, "w") as f:
+            f.create_dataset("sample", data=np.random.randn(500))
+        signal_path = tmp_h5.name
+
+    payload = {
+        "metadata_path": metadata_path,
+        "signal_path": signal_path,
+        "reference_ids": ["sample"],
+        "test_id": "sample",
+    }
+
+    result = manager_agent.run_workflow(payload)
+    print("Workflow result:", result)
 
 
 if __name__ == "__main__":

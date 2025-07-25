@@ -114,3 +114,24 @@ def create_retriever_tool(persist_directory: str = "./chroma_db") -> RetrieverTo
     """
     vector_store = build_vector_store(persist_directory=persist_directory)
     return RetrieverTool(vector_store)
+
+
+if __name__ == "__main__":
+    from tempfile import TemporaryDirectory
+    from langchain.docstore.document import Document
+    from langchain.vectorstores import Chroma
+
+    class RandomEmbeddings:
+        def embed_documents(self, docs):
+            import numpy as np
+            return [np.random.random(8).tolist() for _ in docs]
+
+        def embed_query(self, _):
+            import numpy as np
+            return np.random.random(8).tolist()
+
+    with TemporaryDirectory() as tmp:
+        docs = [Document(page_content="test doc")] 
+        store = Chroma.from_documents(docs, RandomEmbeddings())
+        tool = RetrieverTool(store)
+        print(tool("test"))

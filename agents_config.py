@@ -5,6 +5,8 @@ from __future__ import annotations
 from smolagents import CodeAgent, ToolCallingAgent, VisitWebpageTool, WebSearchTool
 from smolagents.models import Model
 
+from agents import ManagerAgent
+
 from PHM_tools.Retrieval.retriever import create_retriever_tool
 from utils.registry import get_agent, get_tool
 from Agent import create_deep_research_agent
@@ -63,39 +65,19 @@ AGENT_BUILDERS = {
 }
 
 
-def create_manager_agent(model: Model, config=None) -> CodeAgent:
-    """Return a manager agent composed of configurable sub agents.
+def create_manager_agent(model: Model, config=None) -> ManagerAgent:
+    """Instantiate the high-level :class:`ManagerAgent`.
 
-    Parameters
-    ----------
-    model:
-        Model instance created via :func:`model_config.configure_model`.
-    config:
-        Optional configuration object with additional settings. Must contain
-        ``enabled_agents`` listing the agents to include.
+    Args:
+        model: Model instance driving all sub-agents.
+        config: Unused placeholder for backward compatibility.
+
+    Returns:
+        A ready-to-use :class:`ManagerAgent`.
     """
 
-    enabled = getattr(
-        config,
-        "enabled_agents",
-        ["search_agent", "phm_agent", "retrieval_agent"],
-    )
-
-    sub_agents: list[ToolCallingAgent | CodeAgent] = [
-        AGENT_BUILDERS[name](model) for name in enabled if name in AGENT_BUILDERS
-    ]
-
-    manager_agent = CodeAgent(
-        tools=[],
-        model=model,
-        managed_agents=sub_agents,
-        name="manager_agent",
-        description="Orchestrates sub-agents to answer PHM queries.",
-        instructions="Coordinate all sub agents to deliver a complete PHM analysis.",
-        return_full_result=True,
-        add_base_tools=True,
-    )
-    return manager_agent
+    _ = config  # preserved for compatibility
+    return ManagerAgent(model)
 
 
 # def create_rag_agent(model: Model, vector_store) -> CodeAgent:
