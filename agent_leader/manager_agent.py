@@ -5,8 +5,8 @@ from smolagents.agents import CodeAgent
 from smolagents.models import Model
 
 from utils.registry import register_agent, TOOL_REGISTRY
-from agents.phm_analysis_agent import PHMAnalysisAgent
-from agents.phm_strategy_agent import create_phm_strategy_agent
+from agent_leader.phm_analysis_agent import PHMAnalysisAgent
+from agent_leader.phm_strategy_agent import create_phm_strategy_agent
 from PHM_tools.data_management import DataManager
 from PHM_tools.Retrieval.knowledge_base import VectorKnowledgeBaseManager
 

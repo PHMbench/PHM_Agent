@@ -5,11 +5,11 @@ from __future__ import annotations
 from smolagents import CodeAgent, ToolCallingAgent, VisitWebpageTool, WebSearchTool
 from smolagents.models import Model
 
-from agents.manager_agent import ManagerAgent
+from agent_leader.manager_agent import ManagerAgent
 
 from PHM_tools.Retrieval.retriever import create_retriever_tool
 from utils.registry import get_agent, get_tool
-from Agent import create_deep_research_agent
+from agent import create_deep_research_agent
 
 # ---------------------------------------------------------------------------
 # Sub-agent factories

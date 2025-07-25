@@ -187,3 +187,44 @@ make -C docs/ html
 
 Documentation updates are automatically deployed to GitHub Pages whenever the
 `main` branch is updated.
+
+
+## Agents
+
++-------------------------+
+|   ManagerAgent          |  <-- 总负责人 (CEO)
+| (agents/manager_agent.py) |
++-------------------------+
+           |
+           | 1. 接收任务 (payload)
+           | 2. 制定高级策略
+           |
+           v
++-------------------------+
+|   PHMStrategyAgent      |  <-- 策略规划师 (CTO)
+| (agents/phm_strategy_agent.py)|
++-------------------------+
+           |
+           | 3. 将策略分解为具体分析步骤
+           |
+           v
++-------------------------+
+|   PHMAnalysisAgent      |  <-- 项目经理
+| (agents/phm_analysis_agent.py)|
++-------------------------+
+           |
+           | 4. 协调多个专家 Agent 完成具体任务
+           |
+           +------------------------------------------------+
+           |                                                |
+           v                                                v
++-------------------------+                       +-------------------------+
+|   Specialist Agents     |                       |   Support Agents        |
+| (各种专家)              |                       | (提供支持工具)          |
++-------------------------+                       +-------------------------+
+    |                                                 |
+    +-- sp1d_specialist_agent.py (1D信号分析专家)         +-- retrieval_agent.py (信息检索/RAG)
+    +-- sp2d_specialist_agent.py (2D信号/图像分析专家)    +-- deep_research_agent.py (深度研究)
+    +-- stats_feature_agent.py (统计特征提取专家)       +-- report_agent.py (报告生成)
+    +-- physical_feature_agent.py (物理特征提取专家)
+    +-- phm_agent.py (可能是另一个综合性PHM专家)

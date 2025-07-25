@@ -84,15 +84,7 @@ def extract_time_features(signal: list | np.ndarray) -> Dict[str, np.ndarray]:
     return out
 
 
-if __name__ == "__main__":
-    import numpy as np
 
-    rng = np.random.default_rng(0)
-    sample = rng.normal(size=1024)
-    time_res = extract_time_features(sample)
-    freq_res = extract_frequency_features(sample, fs=10_000)
-    print("Time feature sample keys:", list(time_res)[:3])
-    print("Frequency feature sample keys:", list(freq_res)[:3])
 
 
 @register_tool("extract_frequency_features")
@@ -153,3 +145,12 @@ def extract_frequency_features(signal: list | np.ndarray, fs: float = 1.0) -> Di
         v[np.isnan(v) | np.isinf(v)] = 0.0
     return out
 
+if __name__ == "__main__":
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    sample = rng.normal(size=1024)
+    time_res = extract_time_features(sample)
+    freq_res = extract_frequency_features(sample, fs=10_000)
+    print("Time feature sample keys:", list(time_res)[:3])
+    print("Frequency feature sample keys:", list(freq_res)[:3])
