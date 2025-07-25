@@ -97,3 +97,12 @@ def create_deep_research_agent(model: LiteLLMModel) -> ToolCallingAgent:
     return agent
 
 __all__ = ["create_deep_research_agent"]
+
+
+if __name__ == "__main__":
+    class DummyModel:
+        def __call__(self, messages):
+            return type("Obj", (), {"content": "ok"})()
+
+    agent = create_deep_research_agent(DummyModel())
+    print("DeepResearch agent tools:", [t.name for t in agent.tools[:3]], "...")

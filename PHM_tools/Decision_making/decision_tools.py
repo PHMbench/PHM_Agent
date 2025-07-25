@@ -61,3 +61,13 @@ def svm_fault_classifier(
     X_test = np.asarray(list(x_test))
     clf.fit(X_train, y_train)
     return clf.predict(X_test)
+
+
+if __name__ == "__main__":
+    rng = np.random.default_rng(0)
+    demo_data = rng.normal(size=(30, 5))
+    demo_labels = rng.integers(0, 2, size=30)
+    pred_iso = isolation_forest_detector(demo_data)
+    pred_svm = svm_fault_classifier(demo_data, demo_labels, demo_data)
+    print("IsolationForest sample:", pred_iso[:5])
+    print("SVM sample:", pred_svm[:5])

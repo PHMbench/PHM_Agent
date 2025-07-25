@@ -58,3 +58,12 @@ class ReportAgent(CodeAgent):
             add_base_tools=True,
             **kwargs,
         )
+
+
+if __name__ == "__main__":
+    class DummyModel:
+        def __call__(self, messages):
+            return type("Obj", (), {"content": "ok"})()
+
+    agent = ReportAgent(DummyModel())
+    print("Report agent with sub-agents:", [a.name for a in agent.managed_agents])

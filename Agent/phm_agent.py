@@ -36,3 +36,12 @@ class PHMAgent(ToolCallingAgent):
             **kwargs,
         )
 
+
+if __name__ == "__main__":
+    class DummyModel:
+        def __call__(self, messages):
+            return type("Obj", (), {"content": "ok"})()
+
+    agent = PHMAgent([], DummyModel())
+    print("Created PHMAgent with", len(agent.tools), "tools")
+
