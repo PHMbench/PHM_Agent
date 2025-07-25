@@ -86,4 +86,10 @@ class TextInspectorTool(Tool):
         return self.model(messages).content
 
 
+if __name__ == "__main__":
+    tool = TextInspectorTool()
+    content = tool.forward(__file__)
+    print("First 60 chars:\n", content[:60])
+
+
 __all__ = ["TextInspectorTool"]

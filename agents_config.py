@@ -5,6 +5,8 @@ from __future__ import annotations
 from smolagents import CodeAgent, ToolCallingAgent, VisitWebpageTool, WebSearchTool
 from smolagents.models import Model
 
+from agents.manager_agent import ManagerAgent
+
 from PHM_tools.Retrieval.retriever import create_retriever_tool
 from utils.registry import get_agent, get_tool
 from Agent import create_deep_research_agent
@@ -63,39 +65,23 @@ AGENT_BUILDERS = {
 }
 
 
-def create_manager_agent(model: Model, config=None) -> CodeAgent:
-    """Return a manager agent composed of configurable sub agents.
+def create_manager_agent(model: Model, config=None) -> ManagerAgent:
+    """Return the high-level :class:`ManagerAgent` used by the demos.
 
-    Parameters
-    ----------
-    model:
-        Model instance created via :func:`model_config.configure_model`.
-    config:
-        Optional configuration object with additional settings. Must contain
-        ``enabled_agents`` listing the agents to include.
+    The previous implementation dynamically composed a manager from several
+    sub-agents. The new architecture encapsulates this logic inside
+    :class:`ManagerAgent`, so this function simply instantiates that class.
+
+    Args:
+        model: Configured language model instance.
+        config: Optional configuration object (unused).
+
+    Returns:
+        Instance of :class:`ManagerAgent` ready for interaction.
     """
 
-    enabled = getattr(
-        config,
-        "enabled_agents",
-        ["search_agent", "phm_agent", "retrieval_agent"],
-    )
-
-    sub_agents: list[ToolCallingAgent | CodeAgent] = [
-        AGENT_BUILDERS[name](model) for name in enabled if name in AGENT_BUILDERS
-    ]
-
-    manager_agent = CodeAgent(
-        tools=[],
-        model=model,
-        managed_agents=sub_agents,
-        name="manager_agent",
-        description="Orchestrates sub-agents to answer PHM queries.",
-        instructions="Coordinate all sub agents to deliver a complete PHM analysis.",
-        return_full_result=True,
-        add_base_tools=True,
-    )
-    return manager_agent
+    _ = config
+    return ManagerAgent(model)
 
 
 # def create_rag_agent(model: Model, vector_store) -> CodeAgent:
