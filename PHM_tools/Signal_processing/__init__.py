@@ -18,6 +18,7 @@ from .SP_2D import (
     cepstrogram,
     envelope_spectrogram,
 )
+from .slicer_tools import apply_transform, extract_slice
 
 __all__ = [
     "normalize",
@@ -34,4 +35,16 @@ __all__ = [
     "recurrence_plot",
     "cepstrogram",
     "envelope_spectrogram",
+    "apply_transform",
+    "extract_slice",
 ]
+
+
+if __name__ == "__main__":
+    import numpy as np
+
+    signal = np.random.randn(1024)
+    norm = normalize(signal)
+    spec = spectrogram(signal, fs=1000)[0]
+    print("Normalized sample shape:", norm.shape)
+    print("Spectrogram sample shape:", spec.shape)
