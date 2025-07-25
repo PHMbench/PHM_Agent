@@ -44,11 +44,27 @@ def main(config: str = "config.yaml", inspect: bool = False, ui: bool = False) -
         ).launch()
         return
 
-    run_result = manager_agent.run(
-        "If the US keeps it 2024 growth rate, how many years would it take for the GDP to double?"
-    )
-    print("Here is the token usage for the manager agent", run_result.token_usage)
-    print("Here are the timing informations for the manager agent:", run_result.timing)
+    import numpy as np
+    import pandas as pd
+    import h5py
+    import tempfile
+
+    with tempfile.NamedTemporaryFile("w", suffix=".csv", delete=False) as tmp_csv:
+        pd.DataFrame({"id": ["demo"], "label": ["normal"]}).to_csv(tmp_csv.name, index=False)
+        csv_path = tmp_csv.name
+    with tempfile.NamedTemporaryFile(suffix=".h5", delete=False) as tmp_h5:
+        with h5py.File(tmp_h5.name, "w") as f:
+            f.create_dataset("demo", data=np.random.randn(50))
+        h5_path = tmp_h5.name
+
+    payload = {
+        "metadata_path": csv_path,
+        "signal_path": h5_path,
+        "reference_ids": ["demo"],
+        "test_id": "demo",
+    }
+    run_result = manager_agent.run_workflow(payload)
+    print("Workflow result:", run_result)
 
 
 if __name__ == "__main__":

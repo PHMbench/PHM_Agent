@@ -63,39 +63,27 @@ AGENT_BUILDERS = {
 }
 
 
+from agents.manager_agent import ManagerAgent
+
+
 def create_manager_agent(model: Model, config=None) -> CodeAgent:
-    """Return a manager agent composed of configurable sub agents.
+    """Return the upgraded ``ManagerAgent`` orchestrating PHM workflows.
 
     Parameters
     ----------
     model:
         Model instance created via :func:`model_config.configure_model`.
     config:
-        Optional configuration object with additional settings. Must contain
-        ``enabled_agents`` listing the agents to include.
+        Unused optional configuration object for API compatibility.
+
+    Returns
+    -------
+    CodeAgent
+        The initialized :class:`ManagerAgent`.
     """
 
-    enabled = getattr(
-        config,
-        "enabled_agents",
-        ["search_agent", "phm_agent", "retrieval_agent"],
-    )
-
-    sub_agents: list[ToolCallingAgent | CodeAgent] = [
-        AGENT_BUILDERS[name](model) for name in enabled if name in AGENT_BUILDERS
-    ]
-
-    manager_agent = CodeAgent(
-        tools=[],
-        model=model,
-        managed_agents=sub_agents,
-        name="manager_agent",
-        description="Orchestrates sub-agents to answer PHM queries.",
-        instructions="Coordinate all sub agents to deliver a complete PHM analysis.",
-        return_full_result=True,
-        add_base_tools=True,
-    )
-    return manager_agent
+    del config  # currently unused
+    return ManagerAgent(model)
 
 
 # def create_rag_agent(model: Model, vector_store) -> CodeAgent:
@@ -145,3 +133,12 @@ def create_report_agent(model: Model) -> CodeAgent:
         add_base_tools=True,
     )
     return report_agent
+
+
+if __name__ == "__main__":
+    class DummyModel:
+        def __call__(self, messages):
+            return type("Obj", (), {"content": "ok"})()
+
+    agent = create_manager_agent(DummyModel())
+    print("Manager agent created:", type(agent).__name__)

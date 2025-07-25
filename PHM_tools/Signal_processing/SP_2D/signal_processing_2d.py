@@ -258,3 +258,12 @@ def envelope_spectrogram(
     env = np.abs(analytic)
     return spectrogram(env, fs=fs, nperseg=nperseg, noverlap=noverlap)
 
+
+if __name__ == "__main__":
+    rng = np.random.default_rng(0)
+    signal = rng.normal(size=2048)
+    spec = spectrogram(signal, fs=1000)
+    mel = mel_spectrogram(signal, fs=1000)
+    print("Spectrogram shape:", spec.shape)
+    print("Mel-spectrogram shape:", mel.shape)
+
