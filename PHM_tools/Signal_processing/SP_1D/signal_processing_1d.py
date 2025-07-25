@@ -116,3 +116,13 @@ def envelope_spectrum(signal: list | np.ndarray) -> np.ndarray:
     analytic = scipy.signal.hilbert(x, axis=1)
     env = np.abs(analytic)
     return fft(env)
+
+
+if __name__ == "__main__":
+    rng = np.random.default_rng(0)
+    sig = rng.normal(size=1024)
+    filtered = bandpass(sig, fs=1000, low=5, high=200)
+    spec = fft(filtered)
+    env_spec = envelope_spectrum(filtered)
+    print("FFT result shape:", spec.shape)
+    print("Envelope spectrum shape:", env_spec.shape)

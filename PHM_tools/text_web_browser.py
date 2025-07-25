@@ -318,3 +318,8 @@ __all__ = [
     "FindNextTool",
     "ArchiveSearchTool",
 ]
+
+
+if __name__ == "__main__":
+    browser = SimpleTextBrowser(start_page="about:blank")
+    print("Initial address:", browser.address)
