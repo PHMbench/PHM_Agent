@@ -44,37 +44,14 @@ def main(config: str = "config.yaml", inspect: bool = False, ui: bool = False) -
         ).launch()
         return
 
-    import numpy as np
-    import pandas as pd
-    import h5py
-    import tempfile
 
-    rng = np.random.default_rng(0)
-    with tempfile.NamedTemporaryFile("w", suffix=".csv", delete=False) as tmp_csv:
-        pd.DataFrame({"id": ["demo"], "label": ["normal"]}).to_csv(
-            tmp_csv.name, index=False
-        )
-        csv_path = tmp_csv.name
-    with tempfile.NamedTemporaryFile(suffix=".h5", delete=False) as tmp_h5:
-        with h5py.File(tmp_h5.name, "w") as f:
-            f.create_dataset("demo", data=rng.normal(size=50))
-        h5_path = tmp_h5.name
-
-    payload = {
-        "metadata_path": csv_path,
-        "signal_path": h5_path,
-        "reference_ids": ["demo"],
-        "test_id": "demo",
-    }
-
-    run_result = manager_agent.run_workflow(payload)
-    print("Workflow result:", run_result)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run the PHM agent demo")
-    parser.add_argument("--config", default="config.yaml", help="Path to config YAML")
-    parser.add_argument("--inspect", action="store_true", help="Enable OpenInference instrumentation")
-    parser.add_argument("--ui", action="store_true", help="Launch a Gradio web UI")
+    parser.add_argument("--config", default="config/default.yaml", help="Path to config YAML")
+    parser.add_argument("--inspect", action="store_false", help="Enable OpenInference instrumentation")
+    parser.add_argument("--ui", action="store_false", help="Launch a Gradio web UI")
     args = parser.parse_args()
     main(args.config, args.inspect, args.ui)
+

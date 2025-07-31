@@ -50,7 +50,10 @@ def create_phm_strategy_agent(model) -> ToolCallingAgent:
     strategy_agent = ToolCallingAgent(
         model=model,
         tools=prognostics_and_planning_tools,
-        prompt_templates={"system": SYSTEM_PROMPT},
+        name ="PHM_Strategy_Agent",
+        description="负责制定PHM维护计划的Agent",
+        return_full_result=True,
+        instructions=SYSTEM_PROMPT,
     )
     return strategy_agent
 

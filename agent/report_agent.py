@@ -10,7 +10,7 @@ agents in the system.
 
 from typing import Any
 
-from smolagents.agents import CodeAgent, ToolCallingAgent, VisitWebpageTool, WebSearchTool
+from smolagents import CodeAgent, ToolCallingAgent, VisitWebpageTool, WebSearchTool
 from smolagents.models import Model
 
 from PHM_tools.Retrieval.retriever import create_retriever_tool

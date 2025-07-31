@@ -6,6 +6,9 @@ from smolagents.models import Model
 from smolagents.tools import Tool
 
 from utils.registry import register_agent
+from agent.deep_research_agent import create_deep_research_agent
+from agent.report_agent import ReportAgent
+
 
 SYSTEM_PROMPT = """
 你的身份是'PHM总工程师'，一个负责领导一个由“微服务化”虚拟专家组成的、包含研究与检索能力的完整团队来解决复杂诊断任务的专家。
@@ -44,6 +47,17 @@ class PHMAnalysisAgent(CodeAgent):
             instructions=instructions,
             **kwargs,
         )
+
+def create_phm_analysis_agent(model: Model) -> PHMAnalysisAgent:
+    """Create and configure the PHM analysis agent.
+
+    Args:
+        model: The language model instance to drive the agent.
+
+    Returns:
+        An instance of `PHMAnalysisAgent` ready for interaction.
+    """
+    return PHMAnalysisAgent(tools=[], model=model)
 
 
 if __name__ == "__main__":

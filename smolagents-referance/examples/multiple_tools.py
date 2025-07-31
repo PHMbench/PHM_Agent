@@ -2,14 +2,17 @@ import requests
 
 # from smolagents.agents import ToolCallingAgent
 from smolagents import CodeAgent, InferenceClientModel, tool
-
+from dotenv import load_dotenv
+from smolagents import LiteLLMModel
+import os
+load_dotenv(override=True)
 
 # Choose which LLM engine to use!
-model = InferenceClientModel()
+# model = InferenceClientModel()
 # model = TransformersModel(model_id="meta-llama/Llama-3.2-2B-Instruct")
 
 # For anthropic: change model_id below to 'anthropic/claude-3-5-sonnet-20240620'
-# model = LiteLLMModel(model_id="gpt-4o")
+model = LiteLLMModel("gemini/gemini-2.5-pro", api_key=os.getenv("GOOGLE_API_KEY"))
 
 
 @tool

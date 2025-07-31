@@ -25,3 +25,4 @@ langchain_chroma
 langchain_huggingface
 openpyxl
 xlrd
+faiss-gpu

@@ -13,13 +13,18 @@ import numpy as np
 import pandas as pd
 
 
+
 class DataManager:
     """Manage signal metadata and processed data."""
 
     def __init__(self, metadata_path: str, signal_data_path: str) -> None:
-        self.metadata_df = pd.read_csv(metadata_path).set_index("id")
+        if metadata_path.endswith(".csv"):
+            self.metadata_df = pd.read_csv(metadata_path).set_index("Id")
+        elif metadata_path.endswith(".xlsx"):
+            self.metadata_df = pd.read_excel(metadata_path).set_index("Id")
         self.signal_data_path = signal_data_path
-        self.processed_data_cache: Dict[str, Any] = {}
+        self.processed_signal_cache: Dict[str, Any] = {}
+        self.processed_feature_cache: Dict[str, Any] = {}
 
     def get_all_ids(self, label: str | None = None) -> List[str]:
         df = self.metadata_df
@@ -27,21 +32,25 @@ class DataManager:
             df = df[df["label"] == label]
         return df.index.astype(str).tolist()
 
-    def get_signal_by_id(self, signal_id: str) -> Dict[str, np.ndarray]:
+    def get_signal_by_id(self, signal_id: str | List[str]) -> Dict[str, np.ndarray]:
         with h5py.File(self.signal_data_path, "r") as f:
-            if signal_id not in f:
-                raise KeyError(f"Signal ID '{signal_id}' not found")
-            data = f[signal_id][:]
-        return {signal_id: data}
+            if isinstance(signal_id, list):
+                return {sid: f[sid][:] for sid in signal_id if sid in f}
+            if isinstance(signal_id, str):
+                if signal_id not in f:
+                    raise KeyError(f"Signal ID '{signal_id}' not found")
+                data = f[signal_id][:]
+                return {signal_id: data}
+
 
     def get_metadata_by_id(self, signal_id: str) -> Dict[str, Any]:
         return self.metadata_df.loc[signal_id].to_dict()
 
-    def store_processed_data(self, key: str, data: Any) -> None:
-        self.processed_data_cache[key] = data
+    def store_processed_signal(self, key: str, data: Any) -> None:
+        self.processed_signal_cache[key] = data
 
-    def get_processed_data(self, key: str) -> Any:
-        return self.processed_data_cache.get(key)
+    def get_processed_signal(self, key: str) -> Any:
+        return self.processed_signal_cache.get(key)
 
 
 if __name__ == "__main__":

@@ -6,7 +6,7 @@ from .deep_research_agent import create_deep_research_agent
 from .sp1d_specialist_agent import SP1DSpecialistAgent
 from .sp2d_specialist_agent import SP2DSpecialistAgent
 from .stats_feature_agent import StatsFeatureAgent
-from .physical_feature_agent import PhysicalFeatureAgent
+
 from .retrieval_agent import RetrievalAgent
 
 __all__ = [
@@ -16,7 +16,6 @@ __all__ = [
     "SP1DSpecialistAgent",
     "SP2DSpecialistAgent",
     "StatsFeatureAgent",
-    "PhysicalFeatureAgent",
     "RetrievalAgent",
 ]
 

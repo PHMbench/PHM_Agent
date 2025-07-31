@@ -80,8 +80,7 @@ def create_manager_agent(model: Model, config=None) -> ManagerAgent:
         Instance of :class:`ManagerAgent` ready for interaction.
     """
 
-    _ = config
-    return ManagerAgent(model)
+    return ManagerAgent(model,config=config)
 
 
 # def create_rag_agent(model: Model, vector_store) -> CodeAgent:
